@@ -3,8 +3,11 @@ package contenu;
 public class Main {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		System.out.println("initial commit :p");
+		
+		Gaufre g = new Gaufre(3, 4);
+		System.out.print(g.toString());
+		
+		//System.out.println("initial commit :p");
 	}
 
 }
