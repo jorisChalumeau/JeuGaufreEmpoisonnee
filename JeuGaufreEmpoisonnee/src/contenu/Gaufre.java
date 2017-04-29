@@ -59,7 +59,8 @@ public class Gaufre {
 	}
 
 	public String toString(){
-		String affichage = "-";
+		String affichage = "\nLes cellules 'x' sont deja mangees";
+		affichage += "\n-";
 		for(int colonne = 0 ; colonne < this.nbColonnes ; colonne++)
 			affichage += "----";
 		affichage += "\n";
