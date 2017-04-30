@@ -8,14 +8,17 @@ package contenu;
 public class Partie {
 	
 	private Gaufre gaufre;
-	private Joueur j1;
-	private Joueur j2;
+	private Joueur joueur1;
+	private Joueur joueur2;
+	private int tour = 1;
+	private Joueur joueurActuel;
 	
 	public Partie(int nbLignes, int nbColonnes){
 		this.gaufre = new Gaufre(nbLignes, nbColonnes);
 		
-		Joueur j1 = new Joueur();
-		Joueur j2 = new Joueur();
+		this.joueur1 = new Joueur();
+		this.joueur2 = new Joueur();
+		this.joueurActuel = joueur1;
 	}
 	
 	
@@ -25,13 +28,42 @@ public class Partie {
 	 * @param numLigne
 	 * @param numColonne
 	 */
-	public void mangerCellule(Joueur j, int numLigne, int numColonne){
+	public void mangerCellule(int numLigne, int numColonne){
+		
+		if(!this.gaufre.peutEtreMange(numLigne, numColonne)) 
+			return;
+		
 		for(int ligne = 0 ; ligne < this.gaufre.getNbLignes() ; ligne++){
-			for(int colonne = 0 ; colonne < this.gaufre.getNbColonnes() ; colonne++){
-				if(ligne >= numLigne && colonne >= numColonne)
-					this.gaufre.getTabGaufre()[ligne][colonne].setEtat(false);
+				for(int colonne = 0 ; colonne < this.gaufre.getNbColonnes() ; colonne++){
+					if(ligne >= numLigne && colonne >= numColonne)
+						this.gaufre.getTabGaufre()[ligne][colonne].setEtat(true);
 			}
 		}
+		
+		String numJoueur;
+		if(this.joueurActuel == this.joueur2) {
+			numJoueur="2";
+		}
+		else {
+			numJoueur="1";
+		}
+		
+		if(PoisonEstMange()){
+			System.out.println("le " + joueurActuel.toString() + numJoueur + " a perdu :/");
+			return;}
+		
+		//Changement de joueur
+		if(this.joueurActuel == this.joueur2) {
+			this.tour++;
+			this.joueurActuel =  this.joueur1;
+		}
+		else {
+			this.joueurActuel = this.joueur2;
+		}
+	}
+	
+	public boolean PoisonEstMange() {
+		return this.gaufre.getTabGaufre()[0][0].getEtat();
 	}
 	
 	public Gaufre getGaufre() {
@@ -39,12 +71,19 @@ public class Partie {
 	}
 
 
-	public Joueur getJ1() {
-		return j1;
+	public Joueur GetJoueur() {
+		return this.joueurActuel;
+	}
+	
+	public int GetTour() {
+		return this.tour;
+	}
+	
+	public int GetNbLigne(){
+		return this.gaufre.getNbLignes();
 	}
 
-
-	public Joueur getJ2() {
-		return j2;
+	public int GetNbColonne(){
+		return this.gaufre.getNbColonnes();
 	}
 }

@@ -1,9 +1,10 @@
 package contenu;
 
 public class Joueur {
-	
-	public Joueur(){
+		
+		public String toString(){
+			String aff = "Joueur";
+			return aff;
+		}
 		
 	}
-	
-}

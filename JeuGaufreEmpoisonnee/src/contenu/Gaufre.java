@@ -40,7 +40,7 @@ public class Gaufre {
 			return false;
 		
 		// on vérifie que la cellule n'est pas encore mangée
-		if(!this.tabGaufre[numLigne][numColonne].getEtat())
+		if(this.tabGaufre[numLigne][numColonne].getEtat())
 			return false;
 		
 		return true;
@@ -68,7 +68,7 @@ public class Gaufre {
 			affichage += "|";
 			for(int colonne = 0 ; colonne < this.nbColonnes ; colonne++){
 				//affichage += " " + String.format("%03d", this.gaufre[ligne][colonne].getValeur()) + " |";
-				if(this.tabGaufre[ligne][colonne].getEtat())
+				if(!this.tabGaufre[ligne][colonne].getEtat())
 					affichage += "   |";
 				else
 					affichage += " x |";

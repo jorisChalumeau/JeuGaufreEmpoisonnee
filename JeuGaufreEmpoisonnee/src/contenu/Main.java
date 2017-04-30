@@ -14,7 +14,9 @@ public class Main {
 		}
 
 		Partie p = new Partie(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
-		
+		p.mangerCellule(0, 1);
+		p.mangerCellule(1, 0);
+		p.mangerCellule(0, 0);
 		System.out.println(p.getGaufre().toString());
 	}
 

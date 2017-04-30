@@ -7,7 +7,7 @@ public class Cellule {
 	
 	public Cellule(int numLigne, int numColonne){
 //		this.valeur = (int) Math.pow(3, numLigne) * (int) Math.pow(2, numColonne);
-		this.etat = true;
+		this.etat = false;
 	}
 	
 //	public int getValeur(){
