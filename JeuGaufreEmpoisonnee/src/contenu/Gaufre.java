@@ -36,7 +36,7 @@ public class Gaufre {
 	 */
 	public boolean peutEtreMange(int numLigne, int numColonne){
 		// on vérifie que la cellule est dans la gaufre
-		if(numLigne > this.nbLignes || numColonne > this.nbColonnes)
+		if(numLigne >= this.nbLignes || numColonne >= this.nbColonnes || numLigne < 0 || numColonne < 0)
 			return false;
 		
 		// on vérifie que la cellule n'est pas encore mangée
@@ -59,7 +59,7 @@ public class Gaufre {
 	}
 
 	public String toString(){
-		String affichage = "\nLes cellules 'x' sont deja mangees";
+		String affichage = "\n(Les cellules 'x' sont deja mangees)";
 		affichage += "\n-";
 		for(int colonne = 0 ; colonne < this.nbColonnes ; colonne++)
 			affichage += "----";

@@ -1,10 +1,15 @@
 package contenu;
 
 public class Joueur {
-		
-		public String toString(){
-			String aff = "Joueur";
-			return aff;
-		}
-		
+	private final int numJoueur;
+
+	public Joueur(int numJ) {
+		this.numJoueur = numJ;
 	}
+
+	public String toString() {
+		String aff = "Joueur " + this.numJoueur;
+		return aff;
+	}
+
+}
