@@ -25,11 +25,15 @@ public class Main extends Application {
 			nbColonnes = Integer.parseInt(args[1]);
 			if(args.length >= 3){
 				// si on a l'argument "fenetre", on lance l'application en mode fenetre, sinon on la lance en mode console
-				utiliserFenetre = (args[2].equals("fenetres"));
+				utiliserFenetre = (args[2].equals("fenetre"));
+			}
+			if(nbLignes > 8 || nbColonnes > 16){
+				nbLignes = 8;
+				nbColonnes = 13;
 			}
 		} else {
-			nbLignes = 6;
-			nbColonnes = 8;
+			nbLignes = 8;
+			nbColonnes = 6;
 		}
 
 		// initialisation de la partie, de la gaufre etc.

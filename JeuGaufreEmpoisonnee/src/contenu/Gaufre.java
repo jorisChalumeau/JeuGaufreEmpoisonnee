@@ -1,8 +1,8 @@
 package contenu;
 
 public class Gaufre {
-	private int nbLignes;
-	private int nbColonnes;
+	private final int nbLignes;
+	private final int nbColonnes;
 	private Cellule[][] tabGaufre;
 	
 	public Gaufre(int nbLignes, int nbColonnes){

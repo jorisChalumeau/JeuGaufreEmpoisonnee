@@ -26,7 +26,10 @@ public class ConsoleIHM implements AffichageIHM {
 	public int[] demandeCoup() {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Saisir numLigne et numCol : ");
-		return new int[]{sc.nextInt(), sc.nextInt()};
+		int[] res = new int[] { sc.nextInt(), sc.nextInt() };
+		sc.close();
+
+		return res;
 	}
 
 	@Override

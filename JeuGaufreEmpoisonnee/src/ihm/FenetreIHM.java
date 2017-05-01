@@ -2,23 +2,25 @@ package ihm;
 
 import java.util.Scanner;
 
-import contenu.Cellule;
 import contenu.Gaufre;
 import contenu.Joueur;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class FenetreIHM implements AffichageIHM {
+	private static final int LARG_ZONE = 740;
+	private static final int HAUT_ZONE = 600;
 	Gaufre gaufre;
 	Stage stage;
-	
-	public FenetreIHM(Gaufre g, Stage stage){
+	Rectangle[] tabRect;
+
+	public FenetreIHM(Gaufre g, Stage stage) {
 		this.gaufre = g;
 		this.stage = stage;
 		initialiserFenetre(stage);
@@ -26,16 +28,16 @@ public class FenetreIHM implements AffichageIHM {
 
 	@Override
 	public void bienvenu() {
-		final Alert alert = new Alert(Alert.AlertType.INFORMATION);  
-		alert.initOwner(this.stage); 
+		final Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.initOwner(this.stage);
 		alert.setTitle("Bienvenu");
-		alert.setContentText("Debut d'une nouvelle partie de Gaufre empoisonnee"); 
+		alert.setContentText("Debut d'une nouvelle partie de Gaufre empoisonnee");
 		alert.showAndWait();
 	}
 
 	@Override
 	public void afficheGaufre() {
-//		System.out.println(this.gaufre);
+		// System.out.println(this.gaufre);
 	}
 
 	@Override
@@ -43,32 +45,34 @@ public class FenetreIHM implements AffichageIHM {
 		// Lorsqu'un joueur clique sur une case
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Saisir numLigne et numCol : ");
-		
+		int[] res = new int[] { sc.nextInt(), sc.nextInt() };
+		sc.close();
+
 		// convertir la case en coordonnées x et y
-		return new int[]{sc.nextInt(), sc.nextInt()};
+		return res;
 	}
 
 	@Override
 	public void affichePerdant(Joueur j, int tour) {
-		final Alert alert = new Alert(Alert.AlertType.INFORMATION);  
-		alert.initOwner(this.stage); 
+		final Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.initOwner(this.stage);
 		alert.setTitle("Fin de la partie");
-		alert.setContentText("le " + j + " a perdu en " + tour + " tours"); 
+		alert.setContentText("le " + j + " a perdu en " + tour + " tours");
 		alert.showAndWait();
-		
+
 		// on quitte lorsque le joueur appuie sur OK
 		Platform.exit();
 	}
-	
+
 	@Override
 	public void debutTour(Joueur j, int tour) {
-		final Alert alert = new Alert(Alert.AlertType.INFORMATION);  
-		alert.initOwner(this.stage); 
+		final Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.initOwner(this.stage);
 		alert.setTitle("Fin de la partie");
-		alert.setContentText("Tour : " + tour + "\nAu " + j + " de jouer\nCliquer sur une cellule pour la manger"); 
+		alert.setContentText("Tour : " + tour + "\nAu " + j + " de jouer\nCliquer sur une cellule pour la manger");
 		alert.showAndWait();
 	}
-	
+
 	// initialise l'interface graphique ainsi que tous ses composants
 	private void initialiserFenetre(Stage stage2) {
 		// définit la largeur et la hauteur de la fenêtre
@@ -86,7 +90,7 @@ public class FenetreIHM implements AffichageIHM {
 		Group root = new Group();
 		Scene scene = new Scene(root);
 		scene.setFill(Color.WHEAT);
-		
+
 		// création zone joueur 1
 		Rectangle j1 = new Rectangle(5, 95, 246, 250);
 		j1.setArcHeight(20);
@@ -104,15 +108,19 @@ public class FenetreIHM implements AffichageIHM {
 		zoneGaufre.setTranslateX(260);
 		zoneGaufre.setTranslateY(60);
 		// pour délimiter la zone de la gaufre
-		Rectangle rectGaufre = new Rectangle(0, 0, 740, 600);
+		Rectangle rectGaufre = new Rectangle(0, 0, LARG_ZONE, HAUT_ZONE);
 		rectGaufre.setFill(Color.WHITE);
-
-		Rectangle[] tabGaufre = this.genererTabGaufre();
 
 		// ajouter le fond de la zoneGaufre
 		zoneGaufre.getChildren().add(rectGaufre);
 		// ajouter toutes les cellules à la Gaufre
-		zoneGaufre.getChildren().addAll(tabGaufre);
+		Text[] numerotation = this.genererTabGaufre();
+		if (numerotation != null){
+			zoneGaufre.getChildren().addAll(numerotation);
+			zoneGaufre.getChildren().addAll(this.tabRect);
+		}else {
+			this.erreurCreation();
+		}
 
 		// ajout de tous les éléments de la scène
 		root.getChildren().add(j1);
@@ -124,20 +132,63 @@ public class FenetreIHM implements AffichageIHM {
 		// ouvrir le rideau
 		this.stage.show();
 	}
-	
-	private Rectangle[] genererTabGaufre() {
-		// TODO Auto-generated method stub
-//		Rectangle[] tableauDeCase = null;
-//		Cellule c;
-//		int k=0;
-//		for(int i=0; i<this.gaufre.getNbColonnes();i++){
-//			for(int j=0; j<this.gaufre.getNbLignes();j++){
-//				x,y a recalculer a chaque fois 
-//				tableauDeCase[k] = new Rectangle(x,y,largeur,longueur);
-//				k++;
-//			}
-//		}
-//		return tableauDeCase;
+
+	private Text[] genererTabGaufre() {
+		final int largeur = 50;
+		final int hauteur = 60;
+		final int debutX = 50;
+		final int debutY = 50;
+		int posX, posY, ind;
+
+		tabRect = new Rectangle[this.gaufre.getNbLignes() * this.gaufre.getNbColonnes()];
+		Text[] numerotation = new Text[this.gaufre.getNbLignes() + this.gaufre.getNbColonnes()];
+
+		if (this.gaufre.getTabGaufre() != null) {
+
+			// on génére le tableau de numérotation des lignes et colonnes
+			posY = debutY + hauteur/2;
+			posX = debutX - largeur/2;
+			ind = 0;
+			for (int i = 0; i < this.gaufre.getNbLignes(); i++) {
+				numerotation[ind] = new Text(posX, posY, "" + i);
+				posY += hauteur;
+				ind++;
+			}
+			posY = debutY - 15;
+			posX = debutX + 25;
+			for (int j = 0; j < this.gaufre.getNbColonnes(); j++) {
+				numerotation[ind] = new Text(posX, posY, "" + j);
+				posX += largeur;
+				ind++;
+			}
+
+			// on génére la gaufre
+			posY = debutY;
+			posX = debutX;
+			ind = 0;
+			for (int i = 0; i < this.gaufre.getNbLignes(); i++) {
+				for (int j = 0; j < this.gaufre.getNbColonnes(); j++) {
+					this.tabRect[ind] = new Rectangle(posX, posY, largeur, hauteur);
+					this.tabRect[ind].setFill(Color.WHEAT);
+					this.tabRect[ind].setStroke(Color.BEIGE);
+					posX += largeur;
+					ind++;
+				}
+				posX = debutX;
+				posY += hauteur;
+			}
+
+			return numerotation;
+		}
+
 		return null;
+	}
+
+	private void erreurCreation() {
+		final Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.initOwner(this.stage);
+		alert.setTitle("Erreur");
+		alert.setContentText("Erreur lors de la génération de la maquette du jeu.\nVeuillez relancer l'application");
+		alert.showAndWait();
 	}
 }
