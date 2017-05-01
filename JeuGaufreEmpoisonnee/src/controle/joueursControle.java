@@ -17,20 +17,19 @@ import ihm.FenetreIHM;
 public class joueursControle implements EventHandler<MouseEvent> {
 
     FenetreIHM app;
-    String etat;
+    int[] coord;
 
-    public joueursControle(FenetreIHM a, String e) {
+    public joueursControle(FenetreIHM a, int[] c) {
         app = a;
-        etat = e;
+        coord = c;
     }
     
     @Override
     public void handle(MouseEvent event) {
-        double x = event.getX();
-        double y = event.getY();
-        
-        System.out.println("clic en ("+x+","+y+"), etat :"+etat);
-        //app.message = "clic en ("+x+","+y+"), etat :"+etat;
-
+    	System.out.println(coord[0] + ", " + coord[1]);
+    	
+    	// on stocke les coordonnées du coup jouer dans FenetreIHM
+        app.setCoup(coord);
+        app.notify();
     }
 }

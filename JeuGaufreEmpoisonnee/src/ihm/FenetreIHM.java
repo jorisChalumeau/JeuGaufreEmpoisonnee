@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import contenu.Gaufre;
 import contenu.Joueur;
+import controle.joueursControle;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -16,9 +17,15 @@ import javafx.stage.Stage;
 public class FenetreIHM implements AffichageIHM {
 	private static final int LARG_ZONE = 740;
 	private static final int HAUT_ZONE = 600;
-	Gaufre gaufre;
-	Stage stage;
-	Rectangle[] tabRect;
+	private static final int LARG_CELL = 50;
+	private static final int HAUT_CELL = 60;
+	private static final int OFF_X_CELL = 50;
+	private static final int OFF_Y_CELL = 50;
+	
+	private Gaufre gaufre;
+	private Stage stage;
+	private Rectangle[] tabRect;
+	private int[] coup;
 
 	public FenetreIHM(Gaufre g, Stage stage) {
 		this.gaufre = g;
@@ -42,13 +49,25 @@ public class FenetreIHM implements AffichageIHM {
 
 	@Override
 	public int[] demandeCoup() {
-		// Lorsqu'un joueur clique sur une case
+//		// on efface les précédents coups
+//		this.coup = null;
+//		
+//		// Lorsqu'un joueur clique sur une case
+//		if(coup == null){
+//			try {
+//				this.wait();
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//
+//		return coup;
+		
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Saisir numLigne et numCol : ");
 		int[] res = new int[] { sc.nextInt(), sc.nextInt() };
 		sc.close();
 
-		// convertir la case en coordonnées x et y
 		return res;
 	}
 
@@ -134,10 +153,6 @@ public class FenetreIHM implements AffichageIHM {
 	}
 
 	private Text[] genererTabGaufre() {
-		final int largeur = 50;
-		final int hauteur = 60;
-		final int debutX = 50;
-		final int debutY = 50;
 		int posX, posY, ind;
 
 		tabRect = new Rectangle[this.gaufre.getNbLignes() * this.gaufre.getNbColonnes()];
@@ -146,36 +161,37 @@ public class FenetreIHM implements AffichageIHM {
 		if (this.gaufre.getTabGaufre() != null) {
 
 			// on génére le tableau de numérotation des lignes et colonnes
-			posY = debutY + hauteur/2;
-			posX = debutX - largeur/2;
+			posY = OFF_Y_CELL + HAUT_CELL/2;
+			posX = OFF_X_CELL - LARG_CELL/2;
 			ind = 0;
 			for (int i = 0; i < this.gaufre.getNbLignes(); i++) {
 				numerotation[ind] = new Text(posX, posY, "" + i);
-				posY += hauteur;
+				posY += HAUT_CELL;
 				ind++;
 			}
-			posY = debutY - 15;
-			posX = debutX + 25;
+			posY = OFF_Y_CELL - 15;
+			posX = OFF_X_CELL + 25;
 			for (int j = 0; j < this.gaufre.getNbColonnes(); j++) {
 				numerotation[ind] = new Text(posX, posY, "" + j);
-				posX += largeur;
+				posX += LARG_CELL;
 				ind++;
 			}
 
 			// on génére la gaufre
-			posY = debutY;
-			posX = debutX;
+			posY = OFF_Y_CELL;
+			posX = OFF_X_CELL;
 			ind = 0;
 			for (int i = 0; i < this.gaufre.getNbLignes(); i++) {
 				for (int j = 0; j < this.gaufre.getNbColonnes(); j++) {
-					this.tabRect[ind] = new Rectangle(posX, posY, largeur, hauteur);
+					this.tabRect[ind] = new Rectangle(posX, posY, LARG_CELL, HAUT_CELL);
 					this.tabRect[ind].setFill(Color.WHEAT);
 					this.tabRect[ind].setStroke(Color.BEIGE);
-					posX += largeur;
+					this.tabRect[ind].setOnMousePressed(new joueursControle(this,new int[]{i, j}));
+					posX += LARG_CELL;
 					ind++;
 				}
-				posX = debutX;
-				posY += hauteur;
+				posX = OFF_X_CELL;
+				posY += HAUT_CELL;
 			}
 
 			return numerotation;
@@ -190,5 +206,9 @@ public class FenetreIHM implements AffichageIHM {
 		alert.setTitle("Erreur");
 		alert.setContentText("Erreur lors de la génération de la maquette du jeu.\nVeuillez relancer l'application");
 		alert.showAndWait();
+	}
+
+	public void setCoup(int[] coord) {
+		this.coup = new int[]{coord[0], coord[1]};
 	}
 }
