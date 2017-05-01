@@ -2,6 +2,7 @@ package ihm;
 
 import java.util.Scanner;
 
+import contenu.Cellule;
 import contenu.Gaufre;
 import contenu.Joueur;
 import javafx.application.Application;
@@ -126,6 +127,17 @@ public class FenetreIHM implements AffichageIHM {
 	
 	private Rectangle[] genererTabGaufre() {
 		// TODO Auto-generated method stub
+//		Rectangle[] tableauDeCase = null;
+//		Cellule c;
+//		int k=0;
+//		for(int i=0; i<this.gaufre.getNbColonnes();i++){
+//			for(int j=0; j<this.gaufre.getNbLignes();j++){
+//				x,y a recalculer a chaque fois 
+//				tableauDeCase[k] = new Rectangle(x,y,largeur,longueur);
+//				k++;
+//			}
+//		}
+//		return tableauDeCase;
 		return null;
 	}
 }
